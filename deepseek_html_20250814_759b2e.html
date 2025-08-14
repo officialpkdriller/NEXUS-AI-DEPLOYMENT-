@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS-AI - Advanced WhatsApp Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --text: #ffffff;
+            --background: #0f172a;
+            --card-bg: rgba(15, 23, 42, 0.7);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #1e40af);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            line-height: 1.6;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            position: relative;
+        }
+        
+        .info-bar {
+            background: var(--glass);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        
+        .info-bar:hover {
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-item i {
+            color: var(--accent);
+        }
+        
+        .bot-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            perspective: 1000px;
+        }
+        
+        .bot-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+            transition: transform 0.5s ease;
+        }
+        
+        .bot-container:hover .bot-image {
+            transform: rotateY(180deg);
+        }
+        
+        .bot-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--success);
+            border: 2px solid var(--background);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #f59e0b, #ef4444, #3b82f6, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 3s linear infinite;
+            background-size: 200% auto;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+        
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .highlight {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 50px 0 25px;
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Button Styles */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn i {
+            font-size: 1.3rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        }
+        
+        .btn-accent {
+            background: linear-gradient(45deg, var(--accent), #ef4444);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+        }
+        
+        .btn-info {
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
+        }
+        
+        .btn-dark {
+            background: linear-gradient(45deg, #1e293b, #0f172a);
+        }
+        
+        .btn-glass {
+            background: var(--glass);
+        }
+        
+        /* Feature Cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            z-index: -1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Command List */
+        .command-list {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .command-category {
+            margin-bottom: 30px;
+        }
+        
+        .command-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .command-item:hover {
+            background: rgba(124, 58, 237, 0.1);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .command-name {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .command-desc {
+            color: rgba(255, 255, 255, 0.8);
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .command-usage {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: var(--accent);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            margin: 60px 0;
+        }
+        
+        .swiper {
+            width: 100%;
+            height: 100%;
+            padding: 30px 0;
+        }
+        
+        .testimonial-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            margin: 0 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-content::before,
+        .testimonial-content::after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .testimonial-content::before {
+            top: -20px;
+            left: -10px;
+        }
+        
+        .testimonial-content::after {
+            bottom: -40px;
+            right: -10px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+        
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+        
+        /* FAQ Section */
+        .faq-container {
+            margin: 50px 0;
+        }
+        
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item.active .faq-question {
+            background: rgba(124, 58, 237, 0.2);
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 0 30px;
+            margin-top: 80px;
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+        }
+        
+        .footer-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .footer-link {
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 20px 40px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .bot-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .info-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .info-item {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles-js"></div>
+    
+    <div class="container">
+        <header>
+            <div class="info-bar">
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="time"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-calendar-day"></i>
+                    <span id="date"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-calendar-week"></i>
+                    <span id="day"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span id="ip"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-users"></i>
+                    <span id="visitors">Loading...</span> visitors
+                </div>
+            </div>
+            
+            <div class="bot-container floating">
+                <img src="https://i.imgur.com/XYZ1234.png" alt="NEXUS-AI Bot" class="bot-image">
+                <div class="bot-status" title="Online"></div>
+            </div>
+            
+            <h1>NEXUS-AI</h1>
+            
+            <p class="tagline">
+                The <span class="highlight">most advanced</span> WhatsApp AI assistant with cutting-edge features, 
+                <span class="highlight">multi-language support</span>, and <span class="highlight">unparalleled customization</span> 
+                for your communication needs.
+            </p>
+            
+            <div class="buttons-grid">
+                <a href="#deploy" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> DEPLOY NOW
+                </a>
+                
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-star"></i> KEY FEATURES
+                </a>
+                
+                <a href="#commands" class="btn btn-accent">
+                    <i class="fas fa-terminal"></i> COMMAND LIST
+                </a>
+                
+                <a href="https://github.com/yourusername/NEXUS-AI" class="btn btn-dark" target="_blank">
+                    <i class="fab fa-github"></i> GITHUB REPO
+                </a>
+            </div>
+        </header>
+        
+        <!-- Stats Section -->
+        <section>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="user-count">10K+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="command-count">150+</div>
+                    <div class="stat-label">Commands</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="uptime">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="language-count">20+</div>
+                    <div class="stat-label">Languages</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deployment Section -->
+        <section id="deploy">
+            <h2><i class="fas fa-rocket"></i> DEPLOYMENT OPTIONS</h2>
+            <p>Choose your preferred deployment method below. Each option provides a seamless way to get your NEXUS-AI WhatsApp bot up and running in minutes.</p>
+            
+            <div class="buttons-grid">
+                <a href="https://nexus-ai-pairing-site.onrender.com" class="btn btn-primary" id="pairing-btn">
+                    <i class="fas fa-link"></i> PAIRING SESSION WEBSITE
+                </a>
+                
+                <a href="https://github.com/yourusername/NEXUS-AI" class="btn btn-accent" target="_blank">
+                    <i class="fas fa-star"></i> STAR THIS REPOSITORY
+                </a>
+                
+                <a href="https://github.com/yourusername/NEXUS-AI/fork" class="btn btn-warning" target="_blank">
+                    <i class="fas fa-code-branch"></i> FORK THIS REPOSITORY
+                </a>
+                
+                <a href="https://heroku.com/deploy?template=https://github.com/yourusername/NEXUS-AI" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-heroku"></i> DEPLOY ON HEROKU
+                </a>
+                
+                <a href="https://railway.app/new/template?template=https://github.com/yourusername/NEXUS-AI" class="btn btn-info" target="_blank">
+                    <i class="fas fa-train"></i> DEPLOY ON RAILWAY
+                </a>
+                
+                <a href="https://render.com/deploy?repo=https://github.com/yourusername/NEXUS-AI" class="btn btn-success" target="_blank">
+                    <i class="fas fa-server"></i> DEPLOY ON RENDER
+                </a>
+                
+                <a href="https://replit.com/github/yourusername/NEXUS-AI" class="btn btn-dark" target="_blank">
+                    <i class="fas fa-code"></i> DEPLOY ON REPLIT
+                </a>
+                
+                <a href="https://github.com/yourusername/NEXUS-AI/archive/refs/heads/main.zip" class="btn btn-danger">
+                    <i class="fas fa-file-archive"></i> DOWNLOAD ZIP FILE
+                </a>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-heroku"></i>
+                    </div>
+                    <h3 class="feature-title">Heroku Deployment</h3>
+                    <p>1. Click the Heroku button above</p>
+                    <p>2. Log in to your Heroku account</p>
+                    <p>3. Fill in required environment variables</p>
+                    <p>4. Click "Deploy" and wait for completion</p>
+                    <p>5. Open the app URL to start the bot</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-train"></i>
+                    </div>
+                    <h3 class="feature-title">Railway Deployment</h3>
+                    <p>1. Click the Railway button above</p>
+                    <p>2. Authorize with GitHub if prompted</p>
+                    <p>3. Configure environment variables</p>
+                    <p>4. Deploy and monitor the process</p>
+                    <p>5. The bot will start automatically</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="feature-title">Render Deployment</h3>
+                    <p>1. Click the Render button above</p>
+                    <p>2. Create a free account if needed</p>
+                    <p>3. Set up environment variables</p>
+                    <p>4. Start the deployment process</p>
+                    <p>5. The bot will be live after deployment</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features">
+            <h2><i class="fas fa-star"></i> KEY FEATURES</h2>
+            <p>NEXUS-AI comes packed with powerful features designed to enhance your WhatsApp experience and automate your daily tasks.</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">Advanced AI Integration</h3>
+                    <p>Powered by cutting-edge AI models including GPT-4, Claude, and Gemini for intelligent conversations and task completion.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Military-Grade Security</h3>
+                    <p>End-to-end encryption, anti-spam protection, and secure data handling to keep your conversations private.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Language Support</h3>
+                    <p>Supports 20+ languages with automatic detection and translation capabilities for global users.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="feature-title">Plugin System</h3>
+                    <p>Extend functionality with plugins for weather, news, games, productivity tools, and custom integrations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">Automation Tools</h3>
+                    <p>Schedule messages, auto-replies, reminders, and automate repetitive tasks with simple commands.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3 class="feature-title">Customizable Interface</h3>
+                    <p>Personalize the bot's behavior, commands, and responses to fit your specific needs and preferences.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Command List Section -->
+        <section id="commands">
+            <h2><i class="fas fa-terminal"></i> COMMAND LIST</h2>
+            <p>Explore the powerful commands available with NEXUS-AI. The bot supports 150+ commands across various categories.</p>
+            
+            <div class="command-list">
+                <div class="command-category">
+                    <h3><i class="fas fa-comments"></i> AI & Chat Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">/ask</span>
+                        <span class="command-desc">Ask any question to the AI assistant</span>
+                        <span class="command-usage">/ask What is quantum computing?</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/gpt</span>
+                        <span class="command-desc">Get response from GPT-4 model</span>
+                        <span class="command-usage">/gpt Explain blockchain technology</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/claude</span>
+                        <span class="command-desc">Get response from Claude AI</span>
+                        <span class="command-usage">/claude Write a poem about technology</span>
+                    </div>
+                </div>
+                
+                <div class="command-category">
+                    <h3><i class="fas fa-tools"></i> Utility Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">/translate</span>
+                        <span class="command-desc">Translate text to any language</span>
+                        <span class="command-usage">/translate en Hello to spanish</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/weather</span>
+                        <span class="command-desc">Get current weather information</span>
+                        <span class="command-usage">/weather New York</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/remind</span>
+                        <span class="command-desc">Set a reminder for later</span>
+                        <span class="command-usage">/remind 2h Call mom</span>
+                    </div>
+                </div>
+                
+                <div class="command-category">
+                    <h3><i class="fas fa-image"></i> Media Commands</h3>
+                    <div class="command-item">
+                        <span class="command-name">/sticker</span>
+                        <span class="command-desc">Convert image to sticker</span>
+                        <span class="command-usage">Reply to image with /sticker</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/edit</span>
+                        <span class="command-desc">Edit image with AI</span>
+                        <span class="command-usage">/edit remove background</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/tts</span>
+                        <span class="command-desc">Convert text to speech</span>
+                        <span class="command-usage">/tts Hello how are you</span>
+                    </div>
+                </div>
+                
+                <div class="command-category">
+                    <h3><i class="fas fa-gamepad"></i> Fun & Games</h3>
+                    <div class="command-item">
+                        <span class="command-name">/trivia</span>
+                        <span class="command-desc">Play a trivia game</span>
+                        <span class="command-usage">/trivia science</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/meme</span>
+                        <span class="command-desc">Generate a random meme</span>
+                        <span class="command-usage">/meme</span>
+                    </div>
+                    <div class="command-item">
+                        <span class="command-name">/quote</span>
+                        <span class="command-desc">Get inspirational quote</span>
+                        <span class="command-usage">/quote</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="full-commands.html" class="btn btn-primary">
+                    <i class="fas fa-list"></i> VIEW FULL COMMAND LIST
+                </a>
+            </div>
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <h2><i class="fas fa-quote-left"></i> USER TESTIMONIALS</h2>
+            <p>See what our users are saying about NEXUS-AI and how it's transforming their WhatsApp experience.</p>
+            
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                NEXUS-AI has completely transformed how I use WhatsApp. The AI capabilities are mind-blowing and the automation features save me hours every week. Highly recommended for anyone who wants to supercharge their messaging experience.
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="author-avatar">
+                                <div class="author-info">
+                                    <h4>Alex Johnson</h4>
+                                    <p>Tech Entrepreneur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                As a community manager, NEXUS-AI has been a game-changer. The moderation tools and automated responses help me manage large groups effortlessly. The translation feature is particularly useful for our international community.
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="author-avatar">
+                                <div class="author-info">
+                                    <h4>Sarah Miller</h4>
+                                    <p>Community Manager</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                I've tried many WhatsApp bots but NEXUS-AI stands out with its advanced features and reliability. The AI integration is seamless and the bot rarely goes down. The developer team is also very responsive to feedback.
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="User" class="author-avatar">
+                                <div class="author-info">
+                                    <h4>David Chen</h4>
+                                    <p>Software Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                The media editing features alone make NEXUS-AI worth it. I can create stickers, edit photos, and even generate AI art right from WhatsApp. It's like having a full creative suite in my messaging app.
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" class="author-avatar">
+                                <div class="author-info">
+                                    <h4>Emma Rodriguez</h4>
+                                    <p>Graphic Designer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section>
+            <h2><i class="fas fa-question-circle"></i> FREQUENTLY ASKED QUESTIONS</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I deploy NEXUS-AI on my own server?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can deploy NEXUS-AI on various platforms including Heroku, Railway, Render, and Replit. We provide one-click deployment options for each platform. Simply click on the corresponding deployment button above and follow the instructions. For advanced users, you can also clone the repository and run it locally or on your own server.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is NEXUS-AI free to use?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, NEXUS-AI is completely free and open-source. However, some advanced AI features may require API keys from third-party services (like OpenAI for GPT-4) which might have their own usage limits or costs. The core functionality of the bot remains free to use without any restrictions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I customize the bot's commands and responses?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>NEXUS-AI offers extensive customization options through configuration files. You can modify the <code>config.js</code> file to change default settings, add/remove commands, and customize responses. The bot also supports plugins that allow you to extend its functionality without modifying the core code.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is my data secure with NEXUS-AI?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely. NEXUS-AI follows strict privacy guidelines and does not store your personal data or chat history. All conversations are processed in real-time and not persisted. When using AI features, messages are only sent to third-party APIs when necessary and are not stored by our systems.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How can I contribute to the project?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We welcome contributions from the community! You can contribute by submitting pull requests on GitHub, reporting issues, suggesting new features, or improving documentation. Please visit our GitHub repository for contribution guidelines and code of conduct.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Final CTA Section -->
+        <section style="text-align: center; margin: 80px 0;">
+            <h2>READY TO TRANSFORM YOUR WHATSAPP EXPERIENCE?</h2>
+            <p style="margin-bottom: 30px;">Deploy NEXUS-AI today and unlock the full potential of WhatsApp with advanced AI capabilities.</p>
+            <a href="#deploy" class="btn btn-primary" style="padding: 20px 40px; font-size: 1.2rem;">
+                <i class="fas fa-rocket"></i> DEPLOY NOW
+            </a>
+        </section>
+        
+        <footer>
+            <div class="footer-logo">NEXUS-AI</div>
+            
+            <div class="footer-links">
+                <a href="#features" class="footer-link">Features</a>
+                <a href="#commands" class="footer-link">Commands</a>
+                <a href="#deploy" class="footer-link">Deployment</a>
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="https://github.com/yourusername/NEXUS-AI/issues" class="footer-link">Support</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://github.com/yourusername" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://whatsapp.com/channel/yourchannel" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/yourtelegram" class="social-link" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://youtube.com/yourchannel" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://twitter.com/yourusername" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+            
+            <p class="copyright">© 2025 NEXUS-AI WhatsApp Bot. All rights reserved.<br>Created with ❤️ by YourName</p>
+        </footer>
+    </div>
+    
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+        
+        // Display current time, date, day
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Time
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('time').textContent = now.toLocaleTimeString(undefined, timeOptions);
+            
+            // Date
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString(undefined, dateOptions);
+            
+            // Day
+            const dayOptions = { weekday: 'long' };
+            document.getElementById('day').textContent = now.toLocaleDateString(undefined, dayOptions);
+        }
+        
+        // Update every second
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Initial call
+        
+        // Get IP address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').textContent = data.ip;
+            })
+            .catch(() => {
+                document.getElementById('ip').textContent = 'Unknown';
+            });
+        
+        // Visitor counter (simulated)
+        function updateVisitorCount() {
+            // In a real implementation, you would fetch this from your backend
+            const baseCount = 12458;
+            const randomFactor = Math.floor(Math.random() * 100);
+            const count = baseCount + randomFactor;
+            document.getElementById('visitors').textContent = count.toLocaleString();
+        }
+        
+        updateVisitorCount();
+        
+        // Initialize Swiper for testimonials
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            }
+        });
+        
+        // FAQ accordion functionality
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+                
+                // Close other open items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Animate elements on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .btn, .stat-card, .command-item');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Set initial state
+        document.querySelectorAll('.feature-card, .btn, .stat-card, .command-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'all 0.5s ease';
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll(); // Initial call
+        
+        // Random stats animation
+        function animateStats() {
+            const stats = {
+                userCount: { current: 10000, target: 12458, element: document.getElementById('user-count') },
+                commandCount: { current: 150, target: 178, element: document.getElementById('command-count') },
+                uptime: { current: 99.0, target: 99.9, element: document.getElementById('uptime') },
+                languageCount: { current: 20, target: 24, element: document.getElementById('language-count') }
+            };
+            
+            const duration = 2000; // Animation duration in ms
+            const startTime = performance.now();
+            
+            function updateStats(timestamp) {
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                for (const key in stats) {
+                    const stat = stats[key];
+                    const value = stat.current + (stat.target - stat.current) * progress;
+                    
+                    if (key === 'uptime') {
+                        stat.element.textContent = value.toFixed(1) + '%';
+                    } else if (key === 'languageCount') {
+                        stat.element.textContent = Math.floor(value) + '+';
+                    } else if (key === 'commandCount') {
+                        stat.element.textContent = Math.floor(value) + '+';
+                    } else {
+                        stat.element.textContent = Math.floor(value).toLocaleString() + '+';
+                    }
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateStats);
+                }
+            }
+            
+            requestAnimationFrame(updateStats);
+        }
+        
+        // Start stats animation when stats section is in view
+        const statsSection = document.querySelector('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        observer.observe(statsSection);
+    </script>
+</body>
+</html>
